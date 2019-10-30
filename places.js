@@ -1,38 +1,71 @@
-const loadPlaces = function (coords) {
-    // COMMENT FOLLOWING LINE IF YOU WANT TO USE STATIC DATA AND ADD COORDINATES IN THE FOLLOWING 'PLACES' ARRAY
-    //const method = 'api';
+window.onload = () => {
+    let method = 'dynamic';
 
-    const PLACES = [
+    // if you want to statically add places, de-comment following line
+    method = 'static';
+
+    if (method === 'static') {
+        // setTimeout is a temporary fix
+        setTimeout(() => {
+            let places = staticLoadPlaces();
+            renderPlaces(places);
+        }, 3000);
+    }
+
+    if (method !== 'static') {
+
+        // first get current user location
+        return navigator.geolocation.getCurrentPosition(function (position) {
+
+            // than use it to load from remote APIs some places nearby
+            dynamicLoadPlaces(position.coords)
+                .then((places) => {
+                    renderPlaces(places);
+                })
+        },
+            (err) => console.error('Error in retrieving position', err),
+            {
+                enableHighAccuracy: true,
+                maximumAge: 0,
+                timeout: 27000,
+            }
+        );
+    }
+};
+
+function staticLoadPlaces() {
+    return [
         {
             name: "Plats 1",
             location: {
-                lat: 59.304392, // add here latitude if using static data
-                lng: 18.095878, // add here longitude if using static data
+                lat: 59.304914, // add here latitude if using static data
+                lng: 18.093909, // add here longitude if using static data
             }
         },
+        {
+            name: 'Plats 2',
+            location: {
+                lat: 59.304881,
+                lng: 18.097157,
+            }
+        }
     ];
-
-    if (method === 'api') {
-        return loadPlaceFromAPIs(coords);
-    }
-
-    return PLACES;
-};
+}
 
 // getting places from REST APIs
-function loadPlaceFromAPIs(position) {
-    const params = {
+function dynamicLoadPlaces(position) {
+    let params = {
         radius: 300,    // search places not farther than this value (in meters)
-        clientId: 'S5ZRIUXBYTLCRISXXX01B5BCWLBNN1RPAWWJ0JROUX52MMUX',
-        clientSecret: 'HGTQLQ5UJMUAO1IZWOMKH4TMYU4XT1D5RPUTERKDT0FZPP14',
+        clientId: 'HZIJGI4COHQ4AI45QXKCDFJWFJ1SFHYDFCCWKPIJDWHLVQVZ',
+        clientSecret: '',
         version: '20300101',    // foursquare versioning, required but unuseful for this demo
     };
 
     // CORS Proxy to avoid CORS problems
-    const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+    let corsProxy = 'https://cors-anywhere.herokuapp.com/';
 
     // Foursquare API
-    const endpoint = `${corsProxy}https://api.foursquare.com/v2/venues/search?intent=checkin
+    let endpoint = `${corsProxy}https://api.foursquare.com/v2/venues/search?intent=checkin
         &ll=${position.latitude},${position.longitude}
         &radius=${params.radius}
         &client_id=${params.clientId}
@@ -51,40 +84,83 @@ function loadPlaceFromAPIs(position) {
         })
 };
 
+function renderPlaces(places) {
+    let scene = document.querySelector('a-scene');
+
+    places.forEach((place) => {
+        const latitude = place.location.lat;
+        const longitude = place.location.lng;
+
+        // add place icon
+        const icon = document.createElement('a-image');
+        icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
+        icon.setAttribute('name', place.name);
+        icon.setAttribute('src', '../assets/map-marker.png');
+
+        // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
+        icon.setAttribute('scale', '20, 20');
+
+        icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
+
+        const clickListener = function (ev) {
+            ev.stopPropagation();
+            ev.preventDefault();
+
+            const name = ev.target.getAttribute('name');
+
+            const el = ev.detail.intersection && ev.detail.intersection.object.el;
+
+            if (el && el === ev.target) {
+                const label = document.createElement('span');
+                const container = document.createElement('div');
+                container.setAttribute('id', 'place-label');
+                label.innerText = name;
+                container.appendChild(label);
+                document.body.appendChild(container);
+
+                setTimeout(() => {
+                    container.parentElement.removeChild(container);
+                }, 1500);
+            }
+        };
+
+        icon.addEventListener('click', clickListener);
+
+        scene.appendChild(icon);
+    });
+}
 
 window.onload = () => {
-    const scene = document.querySelector('a-scene');
+    let method = 'dynamic';
 
-    // first get current user location
-    return navigator.geolocation.getCurrentPosition(function (position) {
+    // if you want to statically add places, de-comment following line
+    method = 'static';
 
-        // than use it to load from remote APIs some places nearby
-        loadPlaces(position.coords)
-            .then((places) => {
-                places.forEach((place) => {
-                    const latitude = place.location.lat;
-                    const longitude = place.location.lng;
+    if (method === 'static') {
+        // setTimeout is a temporary fix
+        setTimeout(() => {
+            let places = staticLoadPlaces();
+            renderPlaces(places);
+        }, 3000);
+    }
 
-                    // add place name
-                    const text = document.createElement('a-link');
-                    text.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-                    text.setAttribute('title', place.name);
-                    text.setAttribute('href', 'http://www.example.com/');
-                    text.setAttribute('scale', '13 13 13');
+    if (method !== 'static') {
 
-                    text.addEventListener('loaded', () => {
-                        window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'))
-                    });
+        // first get current user location
+        return navigator.geolocation.getCurrentPosition(function (position) {
 
-                    scene.appendChild(text);
-                });
-            })
-    },
-        (err) => console.error('Error in retrieving position', err),
-        {
-            enableHighAccuracy: true,
-            maximumAge: 0,
-            timeout: 27000,
-        }
-    );
+            // than use it to load from remote APIs some places nearby
+            dynamicLoadPlaces(position.coords)
+                .then((places) => {
+                    renderPlaces(places);
+                })
+        },
+            (err) => console.error('Error in retrieving position', err),
+            {
+                enableHighAccuracy: true,
+                maximumAge: 0,
+                timeout: 27000,
+            }
+        );
+    }
 };
