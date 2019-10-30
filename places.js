@@ -12,8 +12,8 @@ window.onload = () => {
             renderPlaces(places);
         }, 3000);
     }
-
-    if (method !== 'static') { //This if-statment is not used right now
+/* This if-statment should be used if a dynamic method should be used
+    if (method !== 'static') { 
 
         // first get current user location
         return navigator.geolocation.getCurrentPosition(function (position) {
@@ -33,7 +33,7 @@ window.onload = () => {
         );
     }
 };
-
+*/
 function staticLoadPlaces() {
     //Arrey with the places
     return [
