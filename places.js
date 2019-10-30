@@ -10,13 +10,6 @@ const loadPlaces = function (coords) {
                 lng: 18.095878, // add here longitude if using static data
             }
         },
-        {
-            name: "Plats 2",
-            location: {
-                lat: 59.304906, // add here latitude if using static data
-                lng: 18.096818, // add here longitude if using static data
-            }
-        },
     ];
 
     if (method === 'api') {
