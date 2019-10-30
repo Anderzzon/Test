@@ -32,8 +32,8 @@ window.onload = () => {
             }
         );
     }
+    */
 };
-*/
 function staticLoadPlaces() {
     //Arrey with the places
     return [
