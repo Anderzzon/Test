@@ -1,8 +1,9 @@
 window.onload = () => {
-    let method = 'dynamic';
+    // if you want to dynamically add places, de-comment following line
+    // let method = 'dynamic';
 
-    // if you want to statically add places, de-comment following line
-    method = 'static';
+    // if you want to statically add places, de-comment following line (Done)
+     let method = 'static';
 
     if (method === 'static') {
         // setTimeout is a temporary fix
@@ -12,7 +13,7 @@ window.onload = () => {
         }, 3000);
     }
 
-    if (method !== 'static') {
+    if (method !== 'static') { //This if-statment is not used right now
 
         // first get current user location
         return navigator.geolocation.getCurrentPosition(function (position) {
@@ -34,6 +35,7 @@ window.onload = () => {
 };
 
 function staticLoadPlaces() {
+    //Arrey with the places
     return [
         {
             name: "Plats 1",
@@ -48,11 +50,18 @@ function staticLoadPlaces() {
                 lat: 59.304881,
                 lng: 18.097157,
             }
+        },
+        {
+            name: 'Plats 3',
+            location: {                
+                lat: 59.303819,
+                lng: 18.096301,
+            }
         }
     ];
 }
 
-// getting places from REST APIs
+// getting places from REST APIs - //This funktion is not used
 function dynamicLoadPlaces(position) {
     let params = {
         radius: 300,    // search places not farther than this value (in meters)
@@ -95,7 +104,7 @@ function renderPlaces(places) {
         const icon = document.createElement('a-image');
         icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
         icon.setAttribute('name', place.name);
-        icon.setAttribute('src', '../assets/map-marker.png');
+        icon.setAttribute('src', 'map-icon.png');
 
         // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
         icon.setAttribute('scale', '20, 20');
@@ -131,10 +140,11 @@ function renderPlaces(places) {
 }
 
 window.onload = () => {
-    let method = 'dynamic';
+    // if you want to dynamically add places, de-comment following line
+    // let method = 'dynamic';
 
-    // if you want to statically add places, de-comment following line
-    method = 'static';
+    // if you want to statically add places, de-comment following line (Done)
+    let method = 'static';
 
     if (method === 'static') {
         // setTimeout is a temporary fix
@@ -144,7 +154,7 @@ window.onload = () => {
         }, 3000);
     }
 
-    if (method !== 'static') {
+    if (method !== 'static') { //This if-statment is not used right now
 
         // first get current user location
         return navigator.geolocation.getCurrentPosition(function (position) {
