@@ -48,7 +48,6 @@ function staticLoadPlaces() {
     ];
 }
 
-
 function renderPlaces(places) {
     let scene = document.querySelector('a-scene');
 
@@ -59,7 +58,8 @@ function renderPlaces(places) {
         // add place icon
         const icon = document.createElement('a-image');
         icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
-        icon.setAttribute('name', place.name);
+        icon.setAttribute('name', "TEST");
+        //icon.setAttribute('name', place.name);
         icon.setAttribute('src', 'map-icon.png');
 
         // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
