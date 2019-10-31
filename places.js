@@ -30,6 +30,20 @@ function staticLoadPlaces() {
                 lat: 59.303819,
                 lng: 18.096301,
             }
+        },
+        {
+            name: 'Plats 4',
+            location: {                
+                lat: 59.310671,
+                lng: 18.024296,
+            }
+        },
+        {
+            name: 'Plats 5',
+            location: {                
+                lat: 59.310212,
+                lng: 18.022568,
+            }
         }
     ];
 }
