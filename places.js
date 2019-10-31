@@ -61,9 +61,10 @@ function renderPlaces(places) {
         icon.setAttribute('name', place.name);
         icon.setAttribute('src', 'map-icon.png');
 
-        // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
+        // for debug purposes, just show in a bigger scale, otherwise I have to personally go to places...
         icon.setAttribute('scale', '20, 20');
 
+        /*
         icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
 
         const clickListener = function (ev) {
@@ -84,11 +85,11 @@ function renderPlaces(places) {
 
                 setTimeout(() => {
                     container.parentElement.removeChild(container);
-                }, 1500);
+                }, 5000);
             }
         };
 
-        icon.addEventListener('click', clickListener);
+        icon.addEventListener('click', clickListener); */
 
         scene.appendChild(icon);
     });
