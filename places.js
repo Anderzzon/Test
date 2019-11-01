@@ -1,4 +1,115 @@
 window.onload = () => {
+    let method = 'static';
+
+    if (method === 'static') {
+        // setTimeout is a temporary fix
+        setTimeout(() => {
+            let places = staticLoadPlaces();
+            renderPlaces(places);
+        }, 3000);
+    }
+
+    if (method !== 'static') {
+
+        // first get current user location
+        return navigator.geolocation.getCurrentPosition(function (position) {
+
+            // than use it to load from remote APIs some places nearby
+            dynamicLoadPlaces(position.coords)
+                .then((places) => {
+                    renderPlaces(places);
+                })
+        },
+            (err) => console.error('Error in retrieving position', err),
+            {
+                enableHighAccuracy: true,
+                maximumAge: 0,
+                timeout: 27000,
+            }
+        );
+    }
+};
+
+function staticLoadPlaces() {
+    return [
+        {
+            name: "Plats 1",
+            link: 'https://anderzzon.github.io',
+            location: {
+                lat: 59.304914, // add here latitude if using static data
+                lng: 18.093909, // add here longitude if using static data
+            }
+        },
+        {
+            name: 'Plats 2',
+            link: 'https://anderzzon.github.io',
+            location: {
+                lat: 59.304881,
+                lng: 18.097157,
+            }
+        },
+        {
+            name: 'Plats 3',
+            link: 'https://anderzzon.github.io',
+            location: {                
+                lat: 59.303819,
+                lng: 18.096301,
+            }
+        },
+        {
+            name: 'Plats 4',
+            link: 'https://anderzzon.github.io',
+            location: {                
+                lat: 59.310671,
+                lng: 18.024296,
+            }
+        },
+        {
+            name: 'Plats 5',
+            link: 'https://anderzzon.github.io',
+            location: {                
+                lat: 59.310212,
+                lng: 18.022568,
+            }
+        },
+        {
+            name: 'Plats 6',
+            link: 'https://anderzzon.github.io',
+            location: {                
+                lat: 59.309476,
+                lng: 18.021699,
+            }
+        }
+    ];
+}
+
+function renderPlaces(places) {
+    let scene = document.querySelector('a-scene');
+
+    places.forEach((place) => {
+        let latitude = place.location.lat;
+        let longitude = place.location.lng;
+
+        // add place name
+        let text = document.createElement('a-link');
+        text.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+        text.setAttribute('title', place.name);
+        text.setAttribute('href', place.link);
+        text.setAttribute('scale', '5 5 5');
+
+        text.addEventListener('loaded', () => {
+            window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'))
+        });
+
+        scene.appendChild(text);
+    });
+}
+
+
+
+
+/*
+window.onload = () => {
      let method = 'static';
 
         // setTimeout is a temporary fix
@@ -12,6 +123,7 @@ function staticLoadPlaces() {
     return [
         {
             name: "Plats 1",
+            link: 'https://anderzzon.github.io',
             location: {
                 lat: 59.304914, // add here latitude if using static data
                 lng: 18.093909, // add here longitude if using static data
@@ -19,6 +131,7 @@ function staticLoadPlaces() {
         },
         {
             name: 'Plats 2',
+            link: 'https://anderzzon.github.io',
             location: {
                 lat: 59.304881,
                 lng: 18.097157,
@@ -26,6 +139,7 @@ function staticLoadPlaces() {
         },
         {
             name: 'Plats 3',
+            link: 'https://anderzzon.github.io',
             location: {                
                 lat: 59.303819,
                 lng: 18.096301,
@@ -33,6 +147,7 @@ function staticLoadPlaces() {
         },
         {
             name: 'Plats 4',
+            link: 'https://anderzzon.github.io',
             location: {                
                 lat: 59.310671,
                 lng: 18.024296,
@@ -40,9 +155,18 @@ function staticLoadPlaces() {
         },
         {
             name: 'Plats 5',
+            link: 'https://anderzzon.github.io',
             location: {                
                 lat: 59.310212,
                 lng: 18.022568,
+            }
+        },
+        {
+            name: 'Plats 6',
+            link: 'https://anderzzon.github.io',
+            location: {                
+                lat: 59.309476,
+                lng: 18.021699,
             }
         }
     ];
@@ -59,12 +183,13 @@ function renderPlaces(places) {
         const icon = document.createElement('a-image');
         icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
         icon.setAttribute('name', place.name);
+        //icon.setAttribute('href', place.link)
         icon.setAttribute('src', 'map-icon.png');
+        
 
         // for debug purposes, just show in a bigger scale, otherwise I have to personally go to places...
-        icon.setAttribute('scale', '20, 20');
-
-        /*
+        icon.setAttribute('scale', '5, 5');
+        
         icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
 
         const clickListener = function (ev) {
@@ -89,7 +214,7 @@ function renderPlaces(places) {
             }
         };
 
-        icon.addEventListener('click', clickListener); */
+        icon.addEventListener('click', clickListener); 
 
         scene.appendChild(icon);
     });
