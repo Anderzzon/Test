@@ -14,7 +14,7 @@ window.onload = () => {
         // first get current user location
         return navigator.geolocation.getCurrentPosition(function (position) {
 
-            // than use it to load from remote APIs some places nearby
+            // then use it to load from remote APIs some places nearby
             dynamicLoadPlaces(position.coords)
                 .then((places) => {
                     renderPlaces(places);
@@ -34,7 +34,7 @@ function staticLoadPlaces() {
     return [
         {
             name: "Plats 1",
-            link: 'https://anderzzon.github.io',
+            link: '/question1',
             location: {
                 lat: 59.304914, // add here latitude if using static data
                 lng: 18.093909, // add here longitude if using static data
@@ -42,7 +42,7 @@ function staticLoadPlaces() {
         },
         {
             name: 'Plats 2',
-            link: 'https://anderzzon.github.io',
+            link: 'question1',
             location: {
                 lat: 59.304881,
                 lng: 18.097157,
@@ -50,7 +50,7 @@ function staticLoadPlaces() {
         },
         {
             name: 'Plats 3',
-            link: 'https://anderzzon.github.io',
+            link: 'question1',
             location: {                
                 lat: 59.303819,
                 lng: 18.096301,
@@ -58,7 +58,7 @@ function staticLoadPlaces() {
         },
         {
             name: 'Plats 4',
-            link: 'https://anderzzon.github.io',
+            link: 'question1',
             location: {                
                 lat: 59.310671,
                 lng: 18.024296,
@@ -66,7 +66,7 @@ function staticLoadPlaces() {
         },
         {
             name: 'Plats 5',
-            link: 'https://anderzzon.github.io',
+            link: 'question1',
             location: {                
                 lat: 59.310212,
                 lng: 18.022568,
@@ -74,10 +74,26 @@ function staticLoadPlaces() {
         },
         {
             name: 'Plats 6',
-            link: 'https://anderzzon.github.io',
+            link: 'question1',
             location: {                
                 lat: 59.309476,
                 lng: 18.021699,
+            }
+        },
+        {
+            name: 'Plats 7',
+            link: 'question1',
+            location: {                
+                lat: 59.584411,
+                lng: 18.583101,
+            }
+        },
+        {
+            name: 'Plats 8',
+            link: 'qustion1',
+            location: {                
+                lat: 59.584122,
+                lng: 18.583491,
             }
         }
     ];
@@ -91,17 +107,17 @@ function renderPlaces(places) {
         let longitude = place.location.lng;
 
         // add place name
-        let text = document.createElement('a-link');
-        text.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-        text.setAttribute('title', place.name);
-        text.setAttribute('href', place.link);
-        text.setAttribute('scale', '5 5 5');
+        let icon = document.createElement('a-link');
+        icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+        icon.setAttribute('title', place.name);
+        icon.setAttribute('href', place.link);
+        icon.setAttribute('scale', '5 5 5');
 
-        text.addEventListener('loaded', () => {
+        icon.addEventListener('loaded', () => {
             window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'))
         });
 
-        scene.appendChild(text);
+        scene.appendChild(icon);
     });
 }
 
